@@ -30,9 +30,22 @@ app.use('/api/subjects', subjectRoutes);
 app.use('/api/pyqs', pyqRoutes);
 app.use('/api/syllabus', syllabusRoutes);
 
-// Root test route
-app.get('/', (req, res) => {
-    res.send('Smart PYQ Organizer API is running...');
+// Base API route
+app.get('/api', (req, res) => {
+    res.json({ message: 'Smart PYQ Organizer API is running...' });
+});
+
+// Serve frontend in production
+const distPath = path.join(__dirname, '..', 'dist');
+app.use(express.static(distPath));
+
+// Catch-all route for SPA
+app.get('*', (req, res) => {
+    // Check if it's an API route that 404ed
+    if (req.url.startsWith('/api')) {
+        return res.status(404).json({ error: 'API route not found' });
+    }
+    res.sendFile(path.join(distPath, 'index.html'));
 });
 
 // Database Connection
