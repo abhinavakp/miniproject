@@ -2,6 +2,7 @@ import React from 'react';
 import { Search, Bell, Menu, BookOpen, LayoutDashboard, Settings, LogOut, User, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import Button from './Button';
 
 const Navbar = () => {
     const { currentUser, logout, isAdmin } = useAuth();

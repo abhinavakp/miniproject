@@ -1,30 +1,42 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
-// ... (imports remain)
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Layout from './components/Layout';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import SchemeSelection from './pages/SchemeSelection';
+import DepartmentSelection from './pages/DepartmentSelection';
+import SemesterSelection from './pages/SemesterSelection';
+import Subjects from './pages/Subjects';
+import Modules from './pages/Modules';
+import PYQ from './pages/PYQ';
+import AdminDashboard from './pages/Admin/Dashboard';
+import UploadPYQPage from './pages/Admin/UploadPYQ';
+import ManagePYQs from './pages/Admin/ManagePYQs';
+
+import Home from './pages/Home';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { currentUser, loading, isAdmin } = useAuth();
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="text-primary-600 font-bold animate-pulse text-xl">Loading...</div>
     </div>
   );
 
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   if (adminOnly && !isAdmin) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return children ? children : <Outlet />;
 };
-
-import Home from './pages/Home';
 
 function App() {
   return (
@@ -50,6 +62,8 @@ function App() {
             <Route path="admin/upload" element={<UploadPYQPage />} />
             <Route path="admin/manage" element={<ManagePYQs />} />
           </Route>
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </AuthProvider>
