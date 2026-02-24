@@ -25,13 +25,47 @@ export const semesters = [
 
 export const subjects = {
     'CSE': {
+        'S1': [
+            { id: 'MAT101_19', name: 'Linear Algebra & Calculus', code: 'MAT101' },
+            { id: 'EST100_19', name: 'Engineering Mechanics', code: 'EST100' },
+            { id: 'CYT100_19', name: 'Engineering Chemistry', code: 'CYT100' },
+            { id: 'EST120_19', name: 'BCE & BME', code: 'EST120' },
+            { id: 'HUT101_19', name: 'Life Skills', code: 'HUT101' },
+        ],
+        'S2': [
+            { id: 'MAT102_19', name: 'Vector Calculus Differential Equation and Transforms', code: 'MAT102' },
+            { id: 'EST110_19', name: 'Engineering Graphics', code: 'EST110' },
+            { id: 'EST130_19', name: 'BEE & BCE', code: 'EST130' },
+            { id: 'EST102_19', name: 'Programming in C', code: 'EST102' },
+            { id: 'HUT102_19', name: 'Professional Communication', code: 'HUT102' },
+        ],
+        'S3': [
+            { id: 'MAT203_19', name: 'Discrete Mathematical Structures', code: 'MAT203' },
+            { id: 'CST201_19', name: 'Data Structures', code: 'CST201' },
+            { id: 'CST203_19', name: 'Logic System Design', code: 'CST203' },
+            { id: 'CST205_19', name: 'Object Oriented Programming using Java', code: 'CST205' },
+            { id: 'MCN201_19', name: 'Sustainable Engineering', code: 'MCN201' },
+            { id: 'EST200_19', name: 'Design Engineering', code: 'EST200' },
+        ],
+        'S4': [
+            { id: 'MAT206_19', name: 'Graph Theory', code: 'MAT206' },
+            { id: 'CST202_19', name: 'Computer Organization and Architecture', code: 'CST202' },
+            { id: 'CST204_19', name: 'Operating Systems', code: 'CST204' },
+            { id: 'CST206_19', name: 'Database Management Systems', code: 'CST206' },
+            { id: 'HUT200_19', name: 'Professional Ethics', code: 'HUT200' },
+            { id: 'MCN202_19', name: 'Constitution of India', code: 'MCN202' },
+        ],
+        'S5': [
+            { id: 'CST301_19', name: 'Formal Languages and Automata Theory', code: 'CST301' },
+            { id: 'CST303_19', name: 'Computer Networks', code: 'CST303' },
+            { id: 'CST305_19', name: 'Software Engineering', code: 'CST305' },
+            { id: 'CST307_19', name: 'Microprocessors and Microcontrollers', code: 'CST307' },
+        ],
         'S6': [
-            { id: 'CST302', name: 'Compiler Design', code: 'CST302' },
-            { id: 'CST304', name: 'Computer Graphics and Image Processing', code: 'CST304' },
-            { id: 'CST306', name: 'Algorithm Analysis and Design', code: 'CST306' },
-            { id: 'HUT300', name: 'Industrial Economics and Foreign Trade', code: 'HUT300' },
-            { id: 'CST308', name: 'Comprehensive Course Work', code: 'CST308' },
-            { id: 'CST362', name: 'Programming in Python (Elective)', code: 'CST362' },
+            { id: 'CST302_19', name: 'Compiler Design', code: 'CST302' },
+            { id: 'CST304_19', name: 'Computer Graphics and Image Processing', code: 'CST304' },
+            { id: 'CST306_19', name: 'Algorithm Analysis and Design', code: 'CST306' },
+            { id: 'CST308_19', name: 'Comprehensive Course Work', code: 'CST308' },
         ],
     },
 };

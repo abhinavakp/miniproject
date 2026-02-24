@@ -44,4 +44,8 @@ export const aiAPI = {
     summarize: (data) => api.post('/ai/summarize', data),
 };
 
+export const syllabusAPI = {
+    getBySubject: (subjectId) => api.get(`/syllabus/${subjectId}`),
+};
+
 export default api;

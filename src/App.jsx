@@ -14,6 +14,7 @@ import PYQ from './pages/PYQ';
 import AdminDashboard from './pages/Admin/Dashboard';
 import UploadPYQPage from './pages/Admin/UploadPYQ';
 import ManagePYQs from './pages/Admin/ManagePYQs';
+import Syllabus from './pages/Syllabus';
 
 import Home from './pages/Home';
 
@@ -56,6 +57,7 @@ function App() {
             <Route path="subjects" element={<Subjects />} />
             <Route path="modules" element={<Modules />} />
             <Route path="pyqs" element={<PYQ />} />
+            <Route path="subjects/:subjectId/syllabus" element={<Syllabus />} />
 
             {/* Admin Routes */}
             <Route path="admin" element={<AdminDashboard />} />

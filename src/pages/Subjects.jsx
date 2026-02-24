@@ -100,13 +100,20 @@ const Subjects = () => {
                                 </h3>
                             </div>
 
-                            <div className="mt-8 flex items-center justify-between text-sm text-gray-400">
-                                <div className="flex items-center gap-1.5 font-medium">
-                                    <GraduationCap size={16} />
-                                    <span>KTU Syllabus</span>
-                                </div>
-                                <div className="flex items-center gap-1 text-primary-600 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span>View Papers</span>
+                            <div className="mt-8 flex items-center justify-between text-sm">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/subjects/${subject._id}/syllabus`);
+                                    }}
+                                    className="flex items-center gap-1.5 font-bold text-gray-500 hover:text-indigo-600 transition-colors"
+                                >
+                                    <BookMarked size={16} />
+                                    <span>Syllabus</span>
+                                </button>
+                                <div className="flex items-center gap-1 text-primary-600 font-bold opacity-100 group-hover:translate-x-1 transition-all">
+                                    <span>Papers</span>
+                                    <ArrowRight size={16} />
                                 </div>
                             </div>
                         </motion.div>

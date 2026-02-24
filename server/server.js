@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import aiRoutes from './routes/aiRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import subjectRoutes from './routes/subjects.js';
+import pyqRoutes from './routes/pyqs.js';
+import syllabusRoutes from './routes/syllabusRoutes.js';
 
 dotenv.config();
 
@@ -17,6 +20,9 @@ app.use('/uploads', express.static('uploads'));
 // Routes
 app.use('/api/ai', aiRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/subjects', subjectRoutes);
+app.use('/api/pyqs', pyqRoutes);
+app.use('/api/syllabus', syllabusRoutes);
 
 // Root test route
 app.get('/', (req, res) => {
