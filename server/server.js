@@ -8,7 +8,13 @@ import subjectRoutes from './routes/subjects.js';
 import pyqRoutes from './routes/pyqs.js';
 import syllabusRoutes from './routes/syllabusRoutes.js';
 
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 
@@ -31,14 +37,18 @@ app.get('/', (req, res) => {
 
 // Database Connection
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/smartpyq';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/smartpyq';
 
 mongoose.connect(MONGO_URI)
     .then(() => {
-        console.log('MongoDB Connected');
-        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+        console.log('✅ MongoDB Connected');
     })
     .catch(err => {
-        console.error('Database connection error:', err);
-        process.exit(1);
+        console.error('❌ Database connection error:', err);
+        console.warn('The server is running, but database features will be unavailable until MongoDB is started.');
     });
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🔗 API URL: http://localhost:${PORT}/api`);
+});
