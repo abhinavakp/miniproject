@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Layout from './components/Layout';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import SchemeSelection from './pages/SchemeSelection';
-import DepartmentSelection from './pages/DepartmentSelection';
-import SemesterSelection from './pages/SemesterSelection';
-import Subjects from './pages/Subjects';
-import Modules from './pages/Modules';
-import PYQ from './pages/PYQ';
-import AdminDashboard from './pages/Admin/Dashboard';
-import UploadPYQPage from './pages/Admin/UploadPYQ';
-import ManagePYQs from './pages/Admin/ManagePYQs';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+
+// ... (imports remain)
 
 // Protected Route Component
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -32,7 +21,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
     return <Navigate to="/" />;
   }
 
-  return children;
+  return children ? children : <Outlet />;
 };
 
 import Home from './pages/Home';
@@ -41,30 +30,26 @@ function App() {
   return (
     <AuthProvider>
       <Routes>
-        {/* Public Landing Page */}
+        {/* Public Routes - Uses Layout for consistent Nav/Footer */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-        </Route>
 
-        {/* Protected Application Routes */}
-        <Route path="/" element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }>
-          <Route path="schemes" element={<SchemeSelection />} />
-          <Route path="departments" element={<DepartmentSelection />} />
-          <Route path="semesters" element={<SemesterSelection />} />
-          <Route path="subjects" element={<Subjects />} />
-          <Route path="modules" element={<Modules />} />
-          <Route path="pyqs" element={<PYQ />} />
+          {/* Protected Application Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="schemes" element={<SchemeSelection />} />
+            <Route path="departments" element={<DepartmentSelection />} />
+            <Route path="semesters" element={<SemesterSelection />} />
+            <Route path="subjects" element={<Subjects />} />
+            <Route path="modules" element={<Modules />} />
+            <Route path="pyqs" element={<PYQ />} />
 
-          {/* Admin Routes */}
-          <Route path="admin" element={<AdminDashboard />} />
-          <Route path="admin/upload" element={<UploadPYQPage />} />
-          <Route path="admin/manage" element={<ManagePYQs />} />
+            {/* Admin Routes */}
+            <Route path="admin" element={<AdminDashboard />} />
+            <Route path="admin/upload" element={<UploadPYQPage />} />
+            <Route path="admin/manage" element={<ManagePYQs />} />
+          </Route>
         </Route>
       </Routes>
     </AuthProvider>
