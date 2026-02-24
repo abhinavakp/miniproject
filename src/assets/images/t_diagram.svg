@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <!-- Styles -->
+  <style>
+    .label { font-family: sans-serif; font-size: 16px; font-weight: bold; fill: #333; }
+  </style>
+
+  <!-- T-Shape -->
+  <!-- Horizontal Bar -->
+  <rect x="50" y="50" width="200" height="50" fill="none" stroke="black" stroke-width="3"/>
+  <line x1="150" y1="50" x2="150" y2="100" stroke="black" stroke-width="3"/>
+  
+  <!-- Vertical Bar (Base) -->
+  <rect x="100" y="100" width="100" height="50" fill="none" stroke="black" stroke-width="3"/>
+
+  <!-- Labels -->
+  <!-- Source Language (S) -->
+  <text x="100" y="80" text-anchor="middle" class="label">S</text>
+  <!-- Target Language (T) -->
+  <text x="200" y="80" text-anchor="middle" class="label">T</text>
+  <!-- Implementation Language (I) -->
+  <text x="150" y="130" text-anchor="middle" class="label">I</text>
+
+  <!-- Captions -->
+  <text x="150" y="180" text-anchor="middle" font-family="sans-serif" font-size="12">T-Diagram: Compiler for S to T written in I</text>
+</svg>

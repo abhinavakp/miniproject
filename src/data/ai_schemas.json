@@ -1,0 +1,168 @@
+{
+    "question_analysis": {
+        "type": "object",
+        "properties": {
+            "subject": {
+                "type": "string"
+            },
+            "module": {
+                "type": "string"
+            },
+            "marks_classification": {
+                "type": "integer",
+                "enum": [
+                    3,
+                    7,
+                    10,
+                    null
+                ]
+            },
+            "key_concepts": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "difficulty": {
+                "type": "string",
+                "enum": [
+                    "Easy",
+                    "Medium",
+                    "Hard"
+                ]
+            }
+        },
+        "required": [
+            "subject",
+            "module",
+            "marks_classification",
+            "key_concepts",
+            "difficulty"
+        ]
+    },
+    "repetition_data": {
+        "type": "object",
+        "properties": {
+            "repeated_questions": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "question_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "topic": {
+                            "type": "string"
+                        },
+                        "frequency": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "question_ids",
+                        "topic"
+                    ]
+                }
+            },
+            "repeated_topics": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "trend_prediction": {
+        "type": "object",
+        "properties": {
+            "probable_questions": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "question": {
+                            "type": "string"
+                        },
+                        "probability": {
+                            "type": "string",
+                            "enum": [
+                                "Low",
+                                "Medium",
+                                "High"
+                            ]
+                        },
+                        "reason": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "question",
+                        "probability",
+                        "reason"
+                    ]
+                }
+            }
+        }
+    },
+    "exam_answer": {
+        "type": "object",
+        "properties": {
+            "structured_answer": {
+                "type": "string"
+            },
+            "diagram_suggestion": {
+                "type": "string"
+            },
+            "key_points": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "practice_questions": {
+        "type": "array",
+        "items": {
+            "type": "string"
+        },
+        "minItems": 3,
+        "maxItems": 3
+    },
+    "revision_plan": {
+        "type": "object",
+        "properties": {
+            "plan": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "day": {
+                            "type": "integer"
+                        },
+                        "topics": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "tasks": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "day",
+                        "topics",
+                        "tasks"
+                    ]
+                }
+            }
+        }
+    }
+}

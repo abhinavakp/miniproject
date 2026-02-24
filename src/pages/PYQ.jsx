@@ -1,132 +1,160 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { pyqs } from '../data/mockData';
-import Card from '../components/Card';
-import Button from '../components/Button';
-import { Filter, Bookmark, CheckCircle, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { FileText, Download, Eye, Calendar, Tag, Shield, Search, Filter, MessageSquare, Sparkles } from 'lucide-react';
+import { pyqAPI } from '../utils/api';
+import AIAssistant from '../components/AIAssistant';
 
 const PYQ = () => {
-    const [searchParams] = useSearchParams();
-    const subjectId = searchParams.get('subject');
-    const moduleId = searchParams.get('module');
+    const [pyqs, setPyqs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterType, setFilterType] = useState('All');
+    const [showAI, setShowAI] = useState(false);
 
-    // Filter state
-    const [activeFilter, setActiveFilter] = useState('all'); // all, 2, 5, 10
-    const [expandedAnswers, setExpandedAnswers] = useState({});
+    // Get subject from state/localStorage (assuming it's stored during navigation)
+    const selectedSubject = JSON.parse(localStorage.getItem('selectedSubject') || '{}');
 
-    // Filter by subject and module
-    const filteredQuestions = pyqs.filter(q => {
-        const matchesSubject = q.subjectId === subjectId;
-        const matchesModule = q.moduleId === moduleId;
-        const matchesMarks = activeFilter === 'all' || q.marks === parseInt(activeFilter);
+    useEffect(() => {
+        const fetchPYQs = async () => {
+            if (!selectedSubject._id) return;
+            try {
+                const response = await pyqAPI.getBySubject(selectedSubject._id);
+                setPyqs(response.data);
+            } catch (error) {
+                console.error('Error fetching PYQs:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPYQs();
+    }, [selectedSubject._id]);
 
-        // Fallback: If no dedicated questions for this module/subject, show mock questions for demo info
-        // But since we want real behavior now, we try to be strict.
-        // If strictly no matches, we might want to return empty or a "No questions found" state.
-        return matchesSubject && matchesModule && matchesMarks;
+    const filteredPYQs = pyqs.filter(pyq => {
+        const matchesSearch = pyq.year.includes(searchTerm) ||
+            pyq.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
+        const matchesType = filterType === 'All' || pyq.examType === filterType;
+        return matchesSearch && matchesType;
     });
 
-    const toggleAnswer = (id) => {
-        setExpandedAnswers(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }));
-    };
+    if (loading) return (
+        <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+        </div>
+    );
 
     return (
-        <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="space-y-8 pb-20">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Previous Year Questions</h1>
-                    <p className="text-gray-500">Practice important questions for {moduleId}</p>
+                    <h1 className="text-3xl font-bold text-gray-900">{selectedSubject.subjectName || 'Question Papers'}</h1>
+                    <p className="text-gray-500 mt-1">
+                        {selectedSubject.subjectCode} • {selectedSubject.semester} • {selectedSubject.department}
+                    </p>
                 </div>
+                <button
+                    onClick={() => setShowAI(!showAI)}
+                    className="flex items-center gap-2 bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-3 rounded-2xl hover:shadow-xl hover:-translate-y-0.5 transition-all shadow-lg shadow-primary-200 group"
+                >
+                    <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
+                    <span>Ask AI Assistant</span>
+                </button>
+            </div>
 
-                <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-                    {['all', '2', '5', '10'].map(mark => (
+            {/* Search and Filters */}
+            <div className="flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                        type="text"
+                        placeholder="Search by year or tags (e.g. important)..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 shadow-sm transition-all"
+                    />
+                </div>
+                <div className="flex gap-2">
+                    {['All', 'Regular', 'Supply'].map(type => (
                         <button
-                            key={mark}
-                            onClick={() => setActiveFilter(mark)}
-                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${activeFilter === mark
-                                ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/30'
-                                : 'bg-white text-gray-600 hover:bg-gray-50'
+                            key={type}
+                            onClick={() => setFilterType(type)}
+                            className={`px-6 py-3 rounded-2xl font-medium transition-all ${filterType === type
+                                ? 'bg-primary-600 text-white shadow-md'
+                                : 'bg-white text-gray-500 hover:bg-gray-50 border border-gray-100'
                                 }`}
                         >
-                            {mark === 'all' ? 'All Questions' : `${mark} Marks`}
+                            {type}
                         </button>
                     ))}
                 </div>
             </div>
 
-            <div className="space-y-6">
-                {filteredQuestions.map((q, index) => (
-                    <Card key={q.id} delay={index * 0.1}>
-                        <div className="flex justify-between items-start gap-4 mb-3">
-                            <div className="flex gap-2">
-                                <span className={`px-2 py-1 rounded text-xs font-bold ${q.marks >= 10 ? 'bg-red-100 text-red-600' :
-                                    q.marks >= 5 ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600'
+            {/* PYQ Grid */}
+            {filteredPYQs.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredPYQs.map((pyq) => (
+                        <div key={pyq._id} className="group bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all hover:border-primary-100">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="p-3 bg-primary-50 text-primary-600 rounded-2xl group-hover:scale-110 transition-transform">
+                                    <FileText size={24} />
+                                </div>
+                                <div className={`px-3 py-1 rounded-full text-xs font-bold ${pyq.examType === 'Regular' ? 'bg-green-50 text-green-600' : 'bg-orange-50 text-orange-600'
                                     }`}>
-                                    {q.marks} Marks
-                                </span>
-                                <span className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-500 font-mono">
-                                    {q.year}
-                                </span>
-                                {q.repeated && (
-                                    <span className="flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">
-                                        <AlertCircle size={12} /> Repeated
-                                    </span>
-                                )}
+                                    {pyq.examType}
+                                </div>
                             </div>
-                            <button className="text-gray-400 hover:text-primary-500 transition-colors">
-                                <Bookmark size={20} />
-                            </button>
+
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">{pyq.year} Question Paper</h3>
+
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {pyq.tags.map(tag => (
+                                    <span key={tag} className="flex items-center gap-1 px-2 py-1 bg-gray-50 text-gray-500 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                                        <Tag size={10} />
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <div className="flex gap-3 pt-4 border-t border-gray-50">
+                                <a
+                                    href={`http://localhost:5000${pyq.pdfUrl}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-50 text-gray-700 font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                                >
+                                    <Eye size={18} />
+                                    <span>View</span>
+                                </a>
+                                <a
+                                    href={`http://localhost:5000${pyq.pdfUrl}`}
+                                    download
+                                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 shadow-lg shadow-primary-100 transition-all active:scale-95"
+                                >
+                                    <Download size={18} />
+                                    <span>Download</span>
+                                </a>
+                            </div>
                         </div>
-
-                        <h3 className="text-lg font-medium text-gray-900 mb-4 leading-relaxed">
-                            {q.question}
-                        </h3>
-
-                        <div>
-                            <button
-                                onClick={() => toggleAnswer(q.id)}
-                                className="flex items-center gap-2 text-primary-600 text-sm font-medium hover:text-primary-700 transition-colors"
-                            >
-                                {expandedAnswers[q.id] ? (
-                                    <>Hide Answer <ChevronUp size={16} /></>
-                                ) : (
-                                    <>Show Answer <ChevronDown size={16} /></>
-                                )}
-                            </button>
-
-                            <AnimatePresence>
-                                {expandedAnswers[q.id] && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        className="overflow-hidden"
-                                    >
-                                        <div className="mt-4 p-4 bg-green-50/50 rounded-xl border border-green-100 text-gray-700 text-sm leading-relaxed">
-                                            <div className="flex items-start gap-2 mb-2 text-green-700 font-semibold">
-                                                <CheckCircle size={16} className="mt-0.5" />
-                                                <span>Correct Answer:</span>
-                                            </div>
-                                            {q.answer}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    </Card>
-                ))}
-
-                {filteredQuestions.length === 0 && (
-                    <div className="text-center py-12 text-gray-400">
-                        <Filter size={48} className="mx-auto mb-4 opacity-20" />
-                        <p>No questions found for this filter.</p>
+                    ))}
+                </div>
+            ) : (
+                <div className="bg-white rounded-3xl p-12 text-center border border-gray-100">
+                    <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Search className="text-gray-300" size={32} />
                     </div>
+                    <h3 className="text-xl font-bold text-gray-900">No question papers found</h3>
+                    <p className="text-gray-500 mt-2">Try adjusting your search or filters.</p>
+                </div>
+            )}
+
+            {/* AI Assistant Floating Chat */}
+            <AnimatePresence>
+                {showAI && (
+                    <AIAssistant
+                        subjectName={selectedSubject.subjectName}
+                        subjectId={selectedSubject.subjectCode || selectedSubject._id}
+                        onClose={() => setShowAI(false)}
+                    />
                 )}
-            </div>
+            </AnimatePresence>
         </div>
     );
 };

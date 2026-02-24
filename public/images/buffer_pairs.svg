@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+  <style>.text{font-family:sans-serif;font-size:14px}.label{font-family:sans-serif;font-size:12px;fill:#666}.code{font-family:monospace;font-size:16px;font-weight:bold}</style>
+  <text x="300" y="20" text-anchor="middle" class="text" font-weight="bold">Input Buffering (Buffer Pairs)</text>
+  <rect x="50" y="50" width="200" height="60" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <text x="150" y="85" text-anchor="middle" class="code">E = M * C</text>
+  <text x="150" y="45" text-anchor="middle" class="label">Buffer 1 (N chars)</text>
+  <rect x="250" y="50" width="30" height="60" fill="#ffebee" stroke="#f44336" stroke-width="2"/>
+  <text x="265" y="85" text-anchor="middle" class="text" font-size="10">eof</text>
+  <rect x="280" y="50" width="200" height="60" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="380" y="85" text-anchor="middle" class="code"> ** 2</text>
+  <text x="380" y="45" text-anchor="middle" class="label">Buffer 2 (N chars)</text>
+  <rect x="480" y="50" width="30" height="60" fill="#ffebee" stroke="#f44336" stroke-width="2"/>
+  <text x="495" y="85" text-anchor="middle" class="text" font-size="10">eof</text>
+  <line x1="70" y1="120" x2="70" y2="150" stroke="black" stroke-width="2"/>
+  <text x="70" y="165" text-anchor="middle" class="text">lexemeBegin</text>
+  <line x1="390" y1="120" x2="390" y2="150" stroke="black" stroke-width="2"/>
+  <text x="390" y="165" text-anchor="middle" class="text">forward</text>
+</svg>

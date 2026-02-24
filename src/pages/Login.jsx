@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { User, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { login } = useAuth();
@@ -17,12 +17,12 @@ const Login = () => {
         e.preventDefault();
         setError('');
 
-        if (!username || !password) {
+        if (!email || !password) {
             setError('Please fill in all fields');
             return;
         }
 
-        const success = await login(username, password);
+        const success = await login(email, password);
         if (success) {
             navigate('/schemes');
         } else {
@@ -56,11 +56,11 @@ const Login = () => {
                             )}
 
                             <Input
-                                label="Username"
-                                placeholder="Enter your username"
-                                icon={User}
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                label="Email Address"
+                                placeholder="Enter your email"
+                                icon={Mail}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
 
                             <Input
@@ -85,7 +85,7 @@ const Login = () => {
 
                     <div className="px-8 py-6 bg-gray-50/50 text-center border-t border-gray-100">
                         <p className="text-gray-500 text-sm">
-                            Don't have an account? <a href="#" className="text-primary-600 font-bold hover:underline">Sign up</a>
+                            Don't have an account? <Link to="/register" className="text-primary-600 font-bold hover:underline">Sign up</Link>
                         </p>
                     </div>
                 </motion.div>

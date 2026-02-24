@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authAPI } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -9,35 +10,55 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check for stored user on load (mock persistence)
         const storedUser = localStorage.getItem('user');
-        if (storedUser) {
+        const token = localStorage.getItem('token');
+        if (storedUser && token) {
             setCurrentUser(JSON.parse(storedUser));
         }
         setLoading(false);
     }, []);
 
-    const login = async (username, password) => {
-        // Mock login logic
-        if (username && password) {
-            const user = { username, role: 'student' };
-            setCurrentUser(user);
-            localStorage.setItem('user', JSON.stringify(user));
+    const login = async (email, password) => {
+        try {
+            const response = await authAPI.login({ email, password });
+            const { token, ...userData } = response.data;
+            setCurrentUser(userData);
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(userData));
             return true;
+        } catch (error) {
+            console.error('Login error:', error);
+            return false;
         }
-        return false;
+    };
+
+    const register = async (name, email, password) => {
+        try {
+            const response = await authAPI.register({ name, email, password });
+            const { token, ...userData } = response.data;
+            setCurrentUser(userData);
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(userData));
+            return true;
+        } catch (error) {
+            console.error('Registration error:', error);
+            return false;
+        }
     };
 
     const logout = () => {
         setCurrentUser(null);
+        localStorage.removeItem('token');
         localStorage.removeItem('user');
     };
 
     const value = {
         currentUser,
         login,
+        register,
         logout,
-        loading
+        loading,
+        isAdmin: currentUser?.role === 'admin'
     };
 
     return (
