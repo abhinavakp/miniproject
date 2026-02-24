@@ -9,10 +9,10 @@ const generateToken = (id) => {
 };
 
 export const registerUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, username, password, role } = req.body;
 
     try {
-        const userExists = await User.findOne({ email });
+        const userExists = await User.findOne({ username });
 
         if (userExists) {
             return res.status(400).json({ error: 'User already exists' });
@@ -20,7 +20,7 @@ export const registerUser = async (req, res) => {
 
         const user = await User.create({
             name,
-            email,
+            username,
             password,
             role: role || 'student'
         });
@@ -40,21 +40,21 @@ export const registerUser = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ username });
 
         if (user && (await bcrypt.compare(password, user.password))) {
             res.json({
                 _id: user._id,
                 name: user.name,
-                email: user.email,
+                username: user.username,
                 role: user.role,
                 token: generateToken(user._id),
             });
         } else {
-            res.status(401).json({ error: 'Invalid email or password' });
+            res.status(401).json({ error: 'Invalid username or password' });
         }
     } catch (error) {
         res.status(500).json({ error: 'Server error' });

@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
-        email: '',
+        username: '',
         password: '',
         confirmPassword: '',
     });
@@ -34,7 +34,7 @@ const Register = () => {
 
         setLoading(true);
         try {
-            const success = await register(formData.name, formData.email, formData.password);
+            const success = await register(formData.name, formData.username, formData.password);
             if (success) {
                 navigate('/schemes');
             } else {
@@ -74,7 +74,7 @@ const Register = () => {
                             <Input
                                 label="Full Name"
                                 name="name"
-                                placeholder="John Doe"
+                                placeholder="Enter Full Name"
                                 icon={User}
                                 value={formData.name}
                                 onChange={handleInputChange}
@@ -82,12 +82,12 @@ const Register = () => {
                             />
 
                             <Input
-                                label="Email Address"
-                                name="email"
-                                type="email"
-                                placeholder="john@example.com"
+                                label="Username"
+                                name="username"
+                                type="text"
+                                placeholder="Choose a username"
                                 icon={Mail}
-                                value={formData.email}
+                                value={formData.username}
                                 onChange={handleInputChange}
                                 required
                             />

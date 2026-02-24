@@ -18,17 +18,17 @@ const seed = async () => {
 
         // Clear existing subjects
         await Subject.deleteMany({});
-        await User.deleteMany({ email: 'admin@smartpyq.com' });
+        await User.deleteMany({ username: 'admin' });
 
         // Create Admin
         const admin = new User({
             name: 'Admin User',
-            email: 'admin@smartpyq.com',
+            username: 'admin',
             password: 'adminpassword123',
             role: 'admin'
         });
         await admin.save();
-        console.log('Admin user created: admin@smartpyq.com / adminpassword123');
+        console.log('Admin user created: admin / adminpassword123');
 
         const subjects = [
             // --- 2019 SCHEME ---

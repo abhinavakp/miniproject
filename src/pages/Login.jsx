@@ -7,7 +7,7 @@ import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { login } = useAuth();
@@ -17,16 +17,16 @@ const Login = () => {
         e.preventDefault();
         setError('');
 
-        if (!email || !password) {
+        if (!username || !password) {
             setError('Please fill in all fields');
             return;
         }
 
-        const success = await login(email, password);
+        const success = await login(username, password);
         if (success) {
             navigate('/schemes');
         } else {
-            setError('Invalid credentials');
+            setError('Invalid username or password');
         }
     };
 
@@ -56,11 +56,11 @@ const Login = () => {
                             )}
 
                             <Input
-                                label="Email Address"
-                                placeholder="Enter your email"
+                                label="Username"
+                                placeholder="Enter your username"
                                 icon={Mail}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
 
                             <Input
